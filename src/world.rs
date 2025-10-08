@@ -1,6 +1,5 @@
 use crate::scene::{Scene, HitRecord};
 use crate::ray::Ray;
-use crate::vec3::Vec3;
 
 pub struct World {
     pub objects: Vec<Box<dyn Scene>>,
@@ -18,22 +17,21 @@ impl World {
 
 impl Scene for World {
     fn hit(&self, ray: &Ray) -> Option<HitRecord> {
-        let mut closest_hit: Option<HitRecord> = None;
-        let mut closest_t = f64::INFINITY;
+        let mut closest: Option<HitRecord> = None;
 
         for obj in &self.objects {
             if let Some(hit) = obj.hit(ray) {
-                if hit.t < closest_t {
-                    closest_t = hit.t;
-                    closest_hit = Some(hit);
+                if closest.is_none() || hit.t < closest.as_ref().unwrap().t {
+                    closest = Some(hit);
                 }
             }
         }
 
-        closest_hit
+        closest
     }
 
-    fn background_color(&self, ray: &Ray) -> Vec3 {
-        Vec3::new(0.5, 0.7, 1.0) // simple background
+    fn background_colour(&self, ray: &Ray) -> crate::vec3::Vec3 {
+        // Default background color (e.g., black)
+        crate::vec3::Vec3::new(0.0, 0.0, 0.0)
     }
 }

@@ -16,13 +16,13 @@ pub fn render<S: Scene>(
 
             let ray = camera.get_ray(u, v);
 
-            let pixel_color = if let Some(hit) = scene.hit(&ray) {
-                (hit.normal + Vec3::new(1.0, 1.0, 1.0)) * 0.5
+            let pixel_colour = if let Some(hit) = scene.hit(&ray) {
+                hit.material.colour
             } else {
-                scene.background_color(&ray)
+                scene.background_colour(&ray)
             };
 
-            img.put_pixel(i, j, to_rgb(pixel_color));
+            img.put_pixel(i, j, to_rgb(pixel_colour));
         }
     }
 
